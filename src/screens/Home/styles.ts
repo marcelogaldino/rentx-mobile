@@ -1,4 +1,5 @@
 import { RFValue } from 'react-native-responsive-fontsize'
+import { FlatList } from 'react-native'
 import styled from 'styled-components/native'
 
 export const Container = styled.View`
@@ -29,3 +30,10 @@ export const HeaderContent = styled.View`
     flex-direction: row;
     align-items: center;
 `
+
+export const CarList = styled(FlatList).attrs({
+    contentContainerStyle: {
+        padding: 24
+    },
+    showsVerticalScrollIndicator: false
+})``

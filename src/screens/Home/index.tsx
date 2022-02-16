@@ -8,10 +8,21 @@ import {
     Container,
     Header,
     TotalCars,
-    HeaderContent
+    HeaderContent,
+    CarList
 } from './styles'
 
 export function Home() {
+    const carData = {
+        brand: 'Audi',
+        name: 'R 5 Coupe',
+        rent: {
+            period: 'Ao dia',
+            price: 120
+        },
+        thumbnail: 'https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png'
+    }
+
     return (
         <Container>
             <StatusBar
@@ -31,7 +42,12 @@ export function Home() {
                 </HeaderContent>
             </Header>
 
-            <Car />
+            <CarList
+                data={[1, 2, 3, 4, 5]}
+                keyExtractor={item => String(item)}
+                renderItem={({ item }) => <Car data={carData} />}
+            >
+            </CarList>
         </Container>
     )
 }
