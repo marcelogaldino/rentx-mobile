@@ -1,5 +1,6 @@
 import React from "react";
 import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 
 import { Acessory } from "../../components/Acessory";
 import { BackButton } from "../../components/BackButton";
@@ -11,6 +12,8 @@ import forceSvg from '../../assets/force.svg'
 import gasolineSvg from '../../assets/gasoline.svg'
 import exchangeSvg from '../../assets/exchange.svg'
 import peopleSvg from '../../assets/people.svg'
+
+import { Button } from "../../components/Button";
 
 import {
     Container,
@@ -28,9 +31,14 @@ import {
     Acessories,
     Footer
 } from './styles'
-import { Button } from "../../components/Button";
 
 export function CarDetails() {
+    const navigation = useNavigation<any>()
+
+    function handleConfirmationRental() {
+        navigation.navigate('Scheduling')
+    }
+
     return (
         <Container>
             <StatusBar
@@ -82,7 +90,7 @@ export function CarDetails() {
             </Content>
 
             <Footer>
-                <Button name="Escolher período do aluguel" />
+                <Button name="Escolher período do aluguel" onPress={handleConfirmationRental} />
             </Footer>
         </Container>
     )
