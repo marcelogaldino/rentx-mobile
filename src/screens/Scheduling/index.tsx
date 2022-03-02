@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { StatusBar } from 'react-native'
 import { useTheme } from 'styled-components'
 import { useNavigation } from '@react-navigation/native'
+import { format } from 'date-fns/esm'
+import { parseISO } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
 
@@ -17,11 +20,27 @@ import {
     Content,
     Footer,
 } from './styles'
-import { StatusBar } from 'react-native'
+
 import { Button } from '../../components/Button'
-import { Calendar } from '../../components/Calendar'
+import {
+    Calendar,
+    DayProps,
+    generateInterval,
+    MarkedDateProps
+} from '../../components/Calendar'
+
+interface RentalPeriod {
+    start: number
+    startFormatted: string
+    end: number
+    endFormatted: string
+}
 
 export function Scheduling() {
+    const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>({} as DayProps)
+    const [markedDates, setMarkedDates] = useState<MarkedDateProps>({} as MarkedDateProps)
+    const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod)
+
     const theme = useTheme()
     const navigation = useNavigation<any>()
 
@@ -31,6 +50,31 @@ export function Scheduling() {
 
     function handleBack() {
         navigation.goBack()
+    }
+
+    function handleChangedate(date: DayProps) {
+        let start = !lastSelectedDate.timestamp ? date : lastSelectedDate
+        let end = date
+
+        if (start.timestamp > end.timestamp) {
+            start = end
+            end = start
+        }
+
+        setLastSelectedDate(end)
+
+        const interval = generateInterval(start, end)
+        setMarkedDates(interval)
+
+        const firstDate = Object.keys(interval)[0]
+        const endDate = Object.keys(interval)[Object.keys(interval).length - 1]
+
+        setRentalPeriod({
+            start: start.timestamp,
+            end: end.timestamp,
+            startFormatted: format(parseISO(firstDate), 'dd/MM/yyyy'),
+            endFormatted: format(parseISO(endDate), 'dd/MM/yyyy'),
+        })
     }
 
     return (
@@ -55,20 +99,31 @@ export function Scheduling() {
                 <RentalPeriod>
                     <DateInfo>
                         <DateTitle>DE</DateTitle>
-                        <DateValue selected={true}>22/02/2022</DateValue>
+                        <DateValue
+                            selected={!!rentalPeriod.startFormatted}
+                        >
+                            {rentalPeriod.startFormatted}
+                        </DateValue>
                     </DateInfo>
 
                     <ArrowSvg />
 
                     <DateInfo>
                         <DateTitle>ATÉ</DateTitle>
-                        <DateValue selected={false}></DateValue>
+                        <DateValue
+                            selected={!!rentalPeriod.endFormatted}
+                        >
+                            {rentalPeriod.endFormatted}
+                        </DateValue>
                     </DateInfo>
                 </RentalPeriod>
             </Header>
 
             <Content>
-                <Calendar />
+                <Calendar
+                    markedDates={markedDates}
+                    onDayPress={handleChangedate}
+                />
             </Content>
 
             <Footer>
