@@ -88,7 +88,7 @@ export const About = styled.Text`
     margin-top: 23px;
 `
 
-export const Acessories = styled.View`
+export const Accessories = styled.View`
     width: 105%;
     
     flex-direction: row;
