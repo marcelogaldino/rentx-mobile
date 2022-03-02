@@ -39,6 +39,10 @@ export function CarDetails() {
         navigation.navigate('Scheduling')
     }
 
+    function handleBack() {
+        navigation.goBack()
+    }
+
     return (
         <Container>
             <StatusBar
@@ -47,9 +51,8 @@ export function CarDetails() {
             />
             <Header>
                 <BackButton
-                    onPress={() => { }}
+                    onPress={handleBack}
                 />
-
             </Header>
 
             <CarImages>

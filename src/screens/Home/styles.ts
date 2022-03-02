@@ -36,4 +36,4 @@ export const CarList = styled(FlatList).attrs({
         padding: 24
     },
     showsVerticalScrollIndicator: false
-})``
+})`` as React.ComponentType as new <DataListProps>() => FlatList<DataListProps>;
