@@ -53,7 +53,7 @@ export function Scheduling() {
 
     function handleConfirmRental() {
         if (!rentalPeriod.startFormatted || !rentalPeriod.endFormatted) {
-            Alert.alert("Selecione o intervado para alugar")
+            Alert.alert("Selecione o intervalo para alugar")
         } else {
             navigation.navigate('SchedulingDetails', {
                 car,
