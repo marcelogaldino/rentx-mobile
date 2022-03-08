@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { StatusBar } from 'react-native'
+import { Alert, StatusBar } from 'react-native'
 import { useTheme } from 'styled-components'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { format } from 'date-fns/esm'
 import { parseISO } from 'date-fns'
 
@@ -22,6 +22,9 @@ import {
 } from './styles'
 
 import { Button } from '../../components/Button'
+
+import { CarDTO } from '../../dtos/CarDTO'
+
 import {
     Calendar,
     DayProps,
@@ -30,10 +33,12 @@ import {
 } from '../../components/Calendar'
 
 interface RentalPeriod {
-    start: number
     startFormatted: string
-    end: number
     endFormatted: string
+}
+
+interface Params {
+    car: CarDTO
 }
 
 export function Scheduling() {
@@ -43,9 +48,18 @@ export function Scheduling() {
 
     const theme = useTheme()
     const navigation = useNavigation<any>()
+    const route = useRoute()
+    const { car } = route.params as Params
 
     function handleConfirmRental() {
-        navigation.navigate('SchedulingDetails')
+        if (!rentalPeriod.startFormatted || !rentalPeriod.endFormatted) {
+            Alert.alert("Selecione o intervado para alugar")
+        } else {
+            navigation.navigate('SchedulingDetails', {
+                car,
+                dates: Object.keys(markedDates)
+            })
+        }
     }
 
     function handleBack() {
@@ -70,8 +84,6 @@ export function Scheduling() {
         const endDate = Object.keys(interval)[Object.keys(interval).length - 1]
 
         setRentalPeriod({
-            start: start.timestamp,
-            end: end.timestamp,
             startFormatted: format(parseISO(firstDate), 'dd/MM/yyyy'),
             endFormatted: format(parseISO(endDate), 'dd/MM/yyyy'),
         })
